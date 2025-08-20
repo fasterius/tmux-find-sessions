@@ -2,6 +2,12 @@
 
 # Script for listing and selecting Tmux sessions using fzf-tmux in a pop-up
 # window (requires Tmux version 3.2 or above).
+#
+# Usage:
+#   `tmux-find-sessions.sh`
+#
+# Example keybind in `tmux.conf`:
+#   `bind-key f run-shell tmux-find-sessions.sh`
 
 # ------------------- Colour scheme, feel free to change ----------------------
 
