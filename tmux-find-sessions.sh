@@ -26,14 +26,14 @@ SESSIONS=$(tmux list-sessions -F "#S: #{session_name}" | cut -d ':' -f 1)
 # the four lines coming from fzf-tmux elements, with a minimum height, without
 # exceeding the terminal's height
 MIN_HEIGHT=7
-SESSION_COUNT=$(echo "$SESSIONS" | wc -l)
+SESSION_COUNT=$(printf "%s\n" "$SESSIONS" | wc -l)
 FZF_HEIGHT=$((SESSION_COUNT + 4 < MIN_HEIGHT ? MIN_HEIGHT : SESSION_COUNT + 4))
 FZF_HEIGHT=$((FZF_HEIGHT > $(tput lines) ? $(tput lines) : FZF_HEIGHT))
 
 # Calculate the fzf window width based on the length of the longest session name
 # plus the six lines coming from fzf-tmux elements, with a minimum width
 MIN_WIDTH=25
-MAX_LENGTH=$(echo "$SESSIONS" | awk '{print length($1)}' | sort -nr | head -1)
+MAX_LENGTH=$(printf "%s\n" "$SESSIONS" | wc -L)
 FZF_WIDTH=$((MAX_LENGTH + 6 < MIN_WIDTH ? MIN_WIDTH : MAX_LENGTH + 6))
 
 # Run fzf-tmux with appropriate settings

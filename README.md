@@ -15,7 +15,6 @@ A Bash script for listing and selecting Tmux sessions using
 - `bash`
 - `tmux >= v3.2`
 - `fzf-tmux`
-- `awk`
 
 ## Installation
 
