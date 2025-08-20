@@ -38,8 +38,8 @@ FZF_WIDTH=$((MAX_LENGTH + 6 < MIN_WIDTH ? MIN_WIDTH : MAX_LENGTH + 6))
 
 # Run fzf-tmux with appropriate settings
 TARGET_SESSION=$(echo "$SESSIONS" | fzf-tmux \
-    -p $FZF_WIDTH,$FZF_HEIGHT \
-    --color=$COLOURS \
+    -p "$FZF_WIDTH","$FZF_HEIGHT" \
+    --color="$COLOURS" \
     --reverse
 )
 
