@@ -1,7 +1,23 @@
 #!/usr/bin/env bash
 
 # Script for listing and selecting Tmux sessions using fzf-tmux in a pop-up
-# window (requires Tmux version 3.2 or above)
+# window (requires Tmux version 3.2 or above).
+
+# ------------------- Colour scheme, feel free to change ----------------------
+
+# Solarized light colours
+COLOURS="hl:#268BD2"               # Highlight: blue
+COLOURS="$COLOURS,fg:#93A1A1"      # Foreground: light grey
+COLOURS="$COLOURS,bg:#FDF6E3"      # Foreground: white
+COLOURS="$COLOURS,fg+:#586E75"     # Selected foreground: grey
+COLOURS="$COLOURS,bg+:#EEE8D5"     # Selected background: dark white
+COLOURS="$COLOURS,hl+:#2AA198"     # Selected highlight: cyan
+COLOURS="$COLOURS,prompt:#268BD2"  # Prompt: blue
+COLOURS="$COLOURS,pointer:#2AA198" # Pointer: cyan
+COLOURS="$COLOURS,info:#93A1A1"    # Info elements: light grey
+COLOURS="$COLOURS,border:#657B83"  # Border: grey
+
+# ----------------------- Main script; DO NOT CHANGE --------------------------
 
 # List Tmux session names
 SESSIONS=$(tmux list-sessions -F "#S: #{session_name}" | cut -d ':' -f 1)
@@ -19,18 +35,6 @@ FZF_HEIGHT=$((FZF_HEIGHT > $(tput lines) ? $(tput lines) : FZF_HEIGHT))
 MIN_WIDTH=25
 MAX_LENGTH=$(echo "$SESSIONS" | awk '{print length($1)}' | sort -nr | head -1)
 FZF_WIDTH=$((MAX_LENGTH + 6 < MIN_WIDTH ? MIN_WIDTH : MAX_LENGTH + 6))
-
-# Solarized colours for fzf-tmux
-COLOURS="hl:#268BD2"               # Highlight: blue
-COLOURS="$COLOURS,fg:#93A1A1"      # Foreground: light grey
-COLOURS="$COLOURS,bg:#FDF6E3"      # Foreground: white
-COLOURS="$COLOURS,fg+:#586E75"     # Selected foreground: grey
-COLOURS="$COLOURS,bg+:#EEE8D5"     # Selected background: dark white
-COLOURS="$COLOURS,hl+:#2AA198"     # Selected highlight: cyan
-COLOURS="$COLOURS,prompt:#268BD2"  # Prompt: blue
-COLOURS="$COLOURS,pointer:#2AA198" # Pointer: cyan
-COLOURS="$COLOURS,info:#93A1A1"    # Info elements: light grey
-COLOURS="$COLOURS,border:#657B83"  # Border: grey
 
 # Run fzf-tmux with appropriate settings
 TARGET_SESSION=$(echo "$SESSIONS" | fzf-tmux \
