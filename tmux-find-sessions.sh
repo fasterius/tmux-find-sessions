@@ -12,16 +12,16 @@
 # ------------------- Colour scheme, feel free to change ----------------------
 
 # Solarized light colours
-COLOURS="hl:#268BD2"               # Highlight: blue
-COLOURS="$COLOURS,fg:#93A1A1"      # Foreground: light grey
-COLOURS="$COLOURS,bg:#FDF6E3"      # Foreground: white
-COLOURS="$COLOURS,fg+:#586E75"     # Selected foreground: grey
-COLOURS="$COLOURS,bg+:#EEE8D5"     # Selected background: dark white
-COLOURS="$COLOURS,hl+:#2AA198"     # Selected highlight: cyan
-COLOURS="$COLOURS,prompt:#268BD2"  # Prompt: blue
-COLOURS="$COLOURS,pointer:#2AA198" # Pointer: cyan
-COLOURS="$COLOURS,info:#93A1A1"    # Info elements: light grey
-COLOURS="$COLOURS,border:#657B83"  # Border: grey
+HIGHLIGHT="#268BD2"           # Highlight: blue
+FOREGROUND="#93A1A1"          # Foreground: light grey
+BACKGROUND="#FDF6E3"          # Background: white
+SELECTED_FOREGROUND="#586E75" # Selected foreground: grey
+SELECTED_BACKGROUND="#EEE8D5" # Selected background: dark white
+SELECTED_HIGHLIGHT="#2AA198"  # Selected highlight: cyan
+PROMPT="#268BD2"              # Prompt: blue
+POINTER="#2AA198"             # Pointer: cyan
+INFO="#93A1A1"                # Info elements: light grey
+BORDER="#657B83"              # Border: grey
 
 # ----------------------- Main script; DO NOT CHANGE --------------------------
 
@@ -41,6 +41,18 @@ FZF_HEIGHT=$((FZF_HEIGHT > $(tput lines) ? $(tput lines) : FZF_HEIGHT))
 MIN_WIDTH=25
 MAX_LENGTH=$(printf "%s\n" "$SESSIONS" | wc -L)
 FZF_WIDTH=$((MAX_LENGTH + 6 < MIN_WIDTH ? MIN_WIDTH : MAX_LENGTH + 6))
+
+# Build colour scheme
+COLOURS="hl:$HIGHLIGHT"
+COLOURS="$COLOURS,fg:$FOREGROUND"
+COLOURS="$COLOURS,bg:$BACKGROUND"
+COLOURS="$COLOURS,fg+:$SELECTED_FOREGROUND"
+COLOURS="$COLOURS,bg+:$SELECTED_BACKGROUND"
+COLOURS="$COLOURS,hl+:$SELECTED_HIGHLIGHT"
+COLOURS="$COLOURS,prompt:$PROMPT"
+COLOURS="$COLOURS,pointer:$POINTER"
+COLOURS="$COLOURS,info:$INFO"
+COLOURS="$COLOURS,border:$BORDER"
 
 # Run fzf-tmux with appropriate settings
 TARGET_SESSION=$(echo "$SESSIONS" | fzf-tmux \
