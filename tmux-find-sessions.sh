@@ -4,26 +4,70 @@
 # window (requires Tmux version 3.2 or above).
 #
 # Usage:
-#   `tmux-find-sessions.sh`
+#   $ tmux-find-sessions.sh [COLOUR_SCHEME]
 #
 # Example keybind in `tmux.conf`:
-#   `bind-key f run-shell tmux-find-sessions.sh`
+#   $ bind-key f run-shell tmux-find-sessions.sh -c solarized_light
 
-# ------------------- Colour scheme, feel free to change ----------------------
+# --------------------------- Argument parsing --------------------------------
 
-# Solarized light colours
-HIGHLIGHT="#268BD2"           # Highlight: blue
-FOREGROUND="#93A1A1"          # Foreground: light grey
-BACKGROUND="#FDF6E3"          # Background: white
-SELECTED_FOREGROUND="#586E75" # Selected foreground: grey
-SELECTED_BACKGROUND="#EEE8D5" # Selected background: dark white
-SELECTED_HIGHLIGHT="#2AA198"  # Selected highlight: cyan
-PROMPT="#268BD2"              # Prompt: blue
-POINTER="#2AA198"             # Pointer: cyan
-INFO="#93A1A1"                # Info elements: light grey
-BORDER="#657B83"              # Border: grey
+# Help function
+help() {
+    echo "Usage: $0 [-c COLOUR_SCHEME]"
+    echo
+    echo "  -c   Colour scheme (available: 'solarized_light', 'everforest_dark_hard)"
+    echo "  -h   Show this help"
+    exit 1
+}
 
-# ----------------------- Main script; DO NOT CHANGE --------------------------
+# Default configuration
+COLOUR_SCHEME=""
+
+# Parse options
+while getopts ":c:h" opt; do
+    case ${opt} in
+        c ) COLOUR_SCHEME="$OPTARG" ;;
+        h ) help ;;
+        \? ) echo "Invalid option: -$OPTARG" >&2; help ;;
+        : ) echo "Option -$OPTARG requires an argument." >&2; help ;;
+    esac
+done
+
+# Validate the colour scheme argument
+if [ -n "$COLOUR_SCHEME" ] && \
+   [ "$COLOUR_SCHEME" != "solarized_light" ] && \
+   [ "$COLOUR_SCHEME" != "everforest_dark_hard" ]; then
+    echo "Error: Invalid colour scheme \`$COLOUR_SCHEME\`" >&2
+    exit 1
+fi
+
+# _---------------------------- Colour schemes --------------------------------
+
+if [ "$COLOUR_SCHEME" == "everforest_dark_hard" ]; then
+    HIGHLIGHT="#83c092"           # Highlight: green
+    FOREGROUND="#d3c6aa"          # Foreground: white
+    BACKGROUND="#272e33"          # Background: dark grey
+    SELECTED_FOREGROUND="#d3c6aa" # Selected foreground: white
+    SELECTED_BACKGROUND="#475258" # Selected background: grey
+    SELECTED_HIGHLIGHT="#83c092"  # Selected highlight: green
+    PROMPT="#83c092"              # Prompt: green
+    POINTER="#83c092"             # Pointer: green
+    INFO="#d3c6aa"                # Info elements: white
+    BORDER="#475258"              # Border: grey
+elif [ "$COLOUR_SCHEME" == "solarized_light" ]; then
+    HIGHLIGHT="#268BD2"           # Highlight: blue
+    FOREGROUND="#93A1A1"          # Foreground: light grey
+    BACKGROUND="#FDF6E3"          # Background: white
+    SELECTED_FOREGROUND="#586E75" # Selected foreground: grey
+    SELECTED_BACKGROUND="#EEE8D5" # Selected background: dark white
+    SELECTED_HIGHLIGHT="#2AA198"  # Selected highlight: cyan
+    PROMPT="#268BD2"              # Prompt: blue
+    POINTER="#2AA198"             # Pointer: cyan
+    INFO="#93A1A1"                # Info elements: light grey
+    BORDER="#657B83"              # Border: grey
+fi
+
+# ------------------------------ Main script ----------------------------------
 
 # List Tmux session names
 SESSIONS=$(tmux list-sessions -F "#S: #{session_name}" | cut -d ':' -f 1)
